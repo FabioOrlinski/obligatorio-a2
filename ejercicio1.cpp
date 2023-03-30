@@ -35,10 +35,41 @@ exoneraciones y los siguientes valores las notas obtenidas.
  * FSValverdeDipetta 80
 */
 #include <iostream>
+#include <cmath>
+#include ".\tads\asociacion.cpp"
+#include ".\tads\hash.cpp"
+#include ".\tads\lista.cpp"
 using namespace std;
 
 int main()
 {
-
+  int cantAlumnos;
+  cin >> cantAlumnos;
+  HashCerrado *hash = new HashCerrado(cantAlumnos);//, fHash);
+  Lista<string> *lista = new Lista<string>();
+  string nombre;
+  float cantMaterias;
+  int nota;
+  int total;
+  for (int i = 0; i < cantAlumnos; i++)
+  {
+    cin >> nombre;
+    lista->insertarFin(nombre);
+    cin >> cantMaterias;
+    for (float i = 0; i < cantMaterias; i++)
+    {
+      cin >> nota;
+      total += nota;
+    }
+    total = int(round(total / cantMaterias));
+    Asociacion *as = new Asociacion(nombre, total);
+    hash->agregar(as);
+  }
+  for (int i = 0; i < cantAlumnos; i++)
+  {
+    hash->imprimir(lista->primero());
+    lista->borrar(lista->primero());
+  }
+  
   return 0;
 }
