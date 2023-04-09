@@ -1,4 +1,5 @@
 #include <iostream>
+#pragma once
 using namespace std;
 
 template<class T>
@@ -44,8 +45,11 @@ class Lista {
 
         void mostrarRec(nodoLista<T> *nodo){
             if(nodo){
-                cout << nodo->dato << endl;
+                cout << nodo->dato << " ";
                 mostrarRec(nodo->sig);
+            }
+            else{
+                cout << endl;
             }
         }
 
@@ -96,6 +100,12 @@ class Lista {
 
         void mostrar(){
             mostrarRec(this->ppio);
+        }
+
+        ~Lista(){
+            while(this->ppio){
+                borrar(this->ppio->dato);
+            }
         }
 };
 
