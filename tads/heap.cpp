@@ -5,11 +5,14 @@ using namespace std;
 class nodoHeap
 {
 public:
-    int prioridad;
+    float prioridad;
     int largo;
     string *pasajeros;
 
     nodoHeap(int prioridad, int largo, string *pasajeros) : prioridad(prioridad), largo(largo), pasajeros(pasajeros) {}
+    ~nodoHeap(){
+        delete[] pasajeros;
+    }
 };
 
 template <class T>
@@ -42,14 +45,18 @@ private:
         }
         int valorPadre = this->heap[posPadre]->prioridad;
         string* datoPadre = this->heap[posPadre]->pasajeros;
+        int largoPadre = this->heap[posPadre]->largo;
         int valor = this->heap[pos]->prioridad;
         string* dato = this->heap[pos]->pasajeros;
-        if (valor < valorPadre)
+        int largo = this->heap[pos]->largo;
+        if (valor > valorPadre)
         {
             this->heap[posPadre]->prioridad = valor;
             this->heap[posPadre]->pasajeros = dato;
+            this->heap[posPadre]->largo = largo;
             this->heap[pos]->prioridad = valorPadre;
             this->heap[pos]->pasajeros = datoPadre;
+            this->heap[pos]->largo = largoPadre;
             flotar(posPadre);
         }
     }
@@ -76,7 +83,7 @@ private:
             {
                 posMin++;
             }
-            if (this->heap[posMin]->prioridad <= prior)
+            if (this->heap[posMin]->prioridad >= prior)
             {
                 this->heap[pos]->prioridad = this->heap[posMin]->prioridad;
                 this->heap[pos]->pasajeros = this->heap[posMin]->pasajeros;
@@ -140,7 +147,7 @@ public:
         delete[] this->heap;
     }
 
-    void encolar(int prioridad, string *pasajeros, int largo)
+    void encolar(float prioridad, string *pasajeros, int largo)
     {
         this->heap[tope] = new nodoHeap(prioridad, largo, pasajeros);
         this->flotar(this->tope++);

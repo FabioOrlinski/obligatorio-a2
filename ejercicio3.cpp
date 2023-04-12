@@ -16,14 +16,15 @@ int main()
 
     cin >> reservas;
     Heap<string[]> *heap = new Heap<string[]>(reservas);
+    string *lista;
     for (int i = 0; i < reservas; i++)
     {
-        float total = 0;
-        float cantVuelos;
+        int total = 0;
+        int cantVuelos;
         string pasaporte;
         cin >> cantPer;
 
-        string *lista = new string[cantPer];
+        lista=new string[cantPer];
         for (int j = 0; j < cantPer; j++)
         {
             cin >> pasaporte;
@@ -31,8 +32,7 @@ int main()
             cin >> cantVuelos;
             total += cantVuelos;
         }
-        heap->encolar((total / cantPer), lista,cantPer);
-        delete[] lista;
+        heap->encolar((total / float(cantPer)), lista,cantPer);
     }
 
     for (int i = 0; i < reservas; i++)
