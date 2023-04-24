@@ -19,7 +19,7 @@ int main()
     string *lista;
     for (int i = 0; i < reservas; i++)
     {
-        int total = 0;
+        float total = 0;
         int cantVuelos;
         string pasaporte;
         cin >> cantPer;
@@ -32,7 +32,7 @@ int main()
             cin >> cantVuelos;
             total += cantVuelos;
         }
-        heap->encolar((total / float(cantPer)), lista,cantPer);
+        heap->encolar(((total / cantPer)), lista,cantPer);
     }
 
     for (int i = 0; i < reservas; i++)

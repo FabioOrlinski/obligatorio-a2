@@ -9,7 +9,7 @@ public:
     int largo;
     string *pasajeros;
 
-    nodoHeap(int prioridad, int largo, string *pasajeros) : prioridad(prioridad), largo(largo), pasajeros(pasajeros) {}
+    nodoHeap(float prioridad, int largo, string *pasajeros) : prioridad(prioridad), largo(largo), pasajeros(pasajeros) {}
     ~nodoHeap(){
         delete[] pasajeros;
     }
@@ -43,10 +43,10 @@ private:
         {
             return;
         }
-        int valorPadre = this->heap[posPadre]->prioridad;
+        float valorPadre = this->heap[posPadre]->prioridad;
         string* datoPadre = this->heap[posPadre]->pasajeros;
         int largoPadre = this->heap[posPadre]->largo;
-        int valor = this->heap[pos]->prioridad;
+        float valor = this->heap[pos]->prioridad;
         string* dato = this->heap[pos]->pasajeros;
         int largo = this->heap[pos]->largo;
         if (valor > valorPadre)
@@ -73,22 +73,25 @@ private:
 
     void hundir(int pos)
     {
-        int prior = this->heap[pos]->prioridad;
+        float prior = this->heap[pos]->prioridad;
         string* dato = this->heap[pos]->pasajeros;
+        int largo = this->heap[pos]->largo;
         if (tengoIzq(pos))
         {
             int posMin = hijoIzq(pos);
             int prioIzq = this->heap[hijoIzq(pos)]->prioridad;
-            if (tengoDer(pos) && this->heap[hijoDer(pos)]->prioridad < prioIzq)
+            if (tengoDer(pos) && this->heap[hijoDer(pos)]->prioridad > prioIzq)
             {
                 posMin++;
             }
             if (this->heap[posMin]->prioridad >= prior)
             {
                 this->heap[pos]->prioridad = this->heap[posMin]->prioridad;
+                this->heap[pos]->largo = this->heap[posMin]->largo;
                 this->heap[pos]->pasajeros = this->heap[posMin]->pasajeros;
                 this->heap[posMin]->prioridad = prior;
                 this->heap[posMin]->pasajeros = dato;
+                this->heap[posMin]->largo = largo;
                 hundir(posMin);
             }
         }
