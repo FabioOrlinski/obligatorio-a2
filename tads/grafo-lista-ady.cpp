@@ -1,170 +1,170 @@
 #include <climits>
 #include <string>
 #include <iostream>
+
 using namespace std;
 
-#define INF 999999999;
+#define INF 999999999
 
+template <class T>
+class nodoHeap
+{
+public:
+    int prioridad;
+    T dato;
+
+    nodoHeap(int prioridad, T dato) : prioridad(prioridad), dato(dato) {}
+};
+
+template <class T>
 class Heap
 {
 private:
-    int **elementos;
-    int *pos;
-    int largo;
-    int ultimoLibre;
+    nodoHeap<T> **heap;
+    int tope;
+    int maxElementos;
 
-    // navegar hacia la izquierda
-    int hijoIzq(int posNodo)
+    bool tengoIzq(int pos)
     {
-        return posNodo * 2;
+        return this->tope > pos * 2 + 1;
     }
 
-    // navegar hacia la derecha
-    int hijoDer(int posNodo)
+    bool tengoDer(int pos)
     {
-        return posNodo * 2 + 1;
+        return this->tope > pos * 2 + 2;
     }
 
-    // navego hacia mi padre
-    int padre(int posNodo)
+    int padre(int pos)
     {
-        return posNodo / 2;
+        return (pos - 1) / 2;
+    }
+    int hijoIzq(int pos)
+    {
+        return pos * 2 + 1;
+    }
+    int hijoDer(int pos)
+    {
+        return pos * 2 + 2;
     }
 
-    void intercambiar(int x, int y)
+    void flotar(int pos)
     {
-        int eleAux = elementos[0][x];
-        int prioridadAux = elementos[1][x];
-        // intercambio los elementos
-        elementos[0][x] = elementos[0][y];
-        elementos[0][y] = eleAux;
-        // intercambio las prioridades
-        elementos[1][x] = elementos[1][y];
-        elementos[1][y] = prioridadAux;
-
-        int posAux = pos[x];
-        pos[x] = pos[y];
-        pos[y] = posAux;
-    }
-
-    void flotar(int posNodo)
-    {
-        // si no llegue a la raiz
-        if (posNodo != 1)
+        int posPadre = padre(pos);
+        if (posPadre == pos)
         {
-            int posNodoPadre = padre(posNodo);
-            // en el caso de que no sea mi posicion: intercambio y sigo flotando
-            if (elementos[1][posNodo] < elementos[1][posNodoPadre])
-            {
-                intercambiar(posNodo, posNodoPadre);
-                flotar(posNodoPadre);
-            }
+            return;
+        }
+        float valorPadre = this->heap[posPadre]->prioridad;
+        T datoPadre = this->heap[posPadre]->dato;
+        float valor = this->heap[pos]->prioridad;
+        T dato = this->heap[pos]->dato;
+        if (valor < valorPadre)
+        {
+            this->heap[posPadre]->prioridad = valor;
+            this->heap[posPadre]->dato = dato;
+            this->heap[pos]->prioridad = valorPadre;
+            this->heap[pos]->dato = datoPadre;
+            flotar(posPadre);
         }
     }
 
-    void hundir(int posNodo)
+    void hundir(int pos)
     {
-        // si tiene hijos (al menos 1)
-        if (hijoIzq(posNodo) < ultimoLibre)
+        float prior = this->heap[pos]->prioridad;
+        T dato = this->heap[pos]->dato;
+        if (tengoIzq(pos))
         {
-            int posIzq = hijoIzq(posNodo);
-            int posDer = hijoDer(posNodo);
-            int hijoMenor = posIzq;
-
-            // si tengo hijo derecho && el hijo derecho es menor que el hijo izquierdo
-            if (posDer < ultimoLibre && elementos[1][posDer] < elementos[1][posIzq])
+            int posMin = hijoIzq(pos);
+            int prioIzq = this->heap[hijoIzq(pos)]->prioridad;
+            if (tengoDer(pos) && this->heap[hijoDer(pos)]->prioridad < prioIzq)
             {
-                hijoMenor = posDer;
+                posMin++;
             }
-
-            if (elementos[1][hijoMenor] < elementos[1][posNodo])
+            if (this->heap[posMin]->prioridad <= prior)
             {
-                intercambiar(hijoMenor, posNodo);
-                hundir(hijoMenor);
+                this->heap[pos]->prioridad = this->heap[posMin]->prioridad;
+                this->heap[pos]->dato = this->heap[posMin]->dato;
+                this->heap[posMin]->prioridad = prior;
+                this->heap[posMin]->dato = dato;
+                hundir(posMin);
             }
         }
     }
 
 public:
-    Heap(int tamanio)
+    Heap(int maxElementos)
     {
-        elementos = new int *[2];
-        elementos[0] = new int[tamanio + 1];
-        elementos[1] = new int[tamanio + 1];
-        pos = new int[tamanio + 1];
-        for (int i = 0; i < tamanio + 1; i++)
+        this->maxElementos = maxElementos;
+        this->tope = 0;
+        this->heap = new nodoHeap<T> *[this->maxElementos];
+    }
+    ~Heap()
+    {
+        for (int i = 0; i < tope; delete this->heap[i++])
+            ;
+        delete[] this->heap;
+    }
+
+    void encolar(int prioridad, T dato)
+    {
+        this->heap[tope] = new nodoHeap<T>(prioridad, dato);
+        this->flotar(this->tope++);
+    }
+
+    // Pre: !EsVacia()
+    void desencolar()
+    {
+        delete this->heap[0];
+        this->heap[0] = this->heap[--this->tope];
+        hundir(0);
+    }
+
+    // Pre: !EsVacia()
+    T minimo()
+    {
+        return this->heap[0]->dato;
+    }
+
+    bool esVacia()
+    {
+        return this->tope == 0;
+    }
+
+    int largo()
+    {
+        return this->tope;
+    }
+
+    bool existe(T elemento)
+    {
+        for (int i = 0; i < tope; i++)
         {
-            pos[i] = -1;
+            if (this->heap[i]->dato == elemento)
+            {
+                return true;
+            }
         }
-        largo = tamanio;
-        ultimoLibre = 1;
+        return false;
     }
 
-    void insertar(int nuevoElemento, int prioridad)
+    void cambiarPrioridad(T elemento, int nuevaPrioridad)
     {
-        if (!estaLleno())
+        for (int i = 0; i < tope; i++)
         {
-            // inserto en la ultima posicion libre
-            elementos[0][ultimoLibre] = nuevoElemento;
-            elementos[1][ultimoLibre] = prioridad;
-            pos[nuevoElemento] = ultimoLibre;
-            // floto la ultima posicion libre
-            flotar(ultimoLibre);
-            ultimoLibre++;
+            if (this->heap[i]->dato == elemento)
+            {
+                this->heap[i]->prioridad = nuevaPrioridad;
+                if (nuevaPrioridad < this->heap[padre(i)]->prioridad)
+                {
+                    flotar(i);
+                }
+                else
+                {
+                    hundir(i);
+                }
+                break;
+            }
         }
-    }
-
-    void cambiarPrioridad(int elemento, int nuevaPrioridad)
-    {
-        cout << "empieza cambiar prioridad con parametros: elemento: " << elemento << ", y nuevaPrioridad: " << nuevaPrioridad << endl;
-        if (existe(elemento))
-        {
-            cout << "existe cambiar prioridad con parametros: elemento: " << elemento << ", y nuevaPrioridad: " << nuevaPrioridad << endl;
-            int posDelElemento = pos[elemento];
-            cout << "posDelElemento:  " << nuevaPrioridad << endl;
-            elementos[1][posDelElemento] = nuevaPrioridad;
-            flotar(posDelElemento);
-            hundir(posDelElemento);
-        }
-        cout << "termina cambiar prioridad con parametros: elemento: " << elemento << ", y nuevaPrioridad: " << nuevaPrioridad << endl;
-    }
-
-    bool existe(int elemento)
-    {
-        return pos[elemento] != -1;
-    }
-
-    int obtenerMinimo()
-    {
-        if (!esVacio())
-        {
-            return elementos[0][1];
-        }
-        return -1;
-    }
-
-    void borrarMinimo()
-    {
-        if (!esVacio())
-        {
-            // pongo en la raiz el ultimo elemento
-            pos[elementos[0][1]] = -1;
-            elementos[0][1] = elementos[0][ultimoLibre - 1];
-            elementos[1][1] = elementos[1][ultimoLibre - 1];
-            ultimoLibre--;
-            // hundo la raiz
-            hundir(1);
-        }
-    }
-
-    bool esVacio()
-    {
-        return ultimoLibre == 1;
-    }
-
-    bool estaLleno()
-    {
-        return ultimoLibre > largo;
     }
 };
 
@@ -176,20 +176,21 @@ struct Arista
     Arista(int unOrigen, int unDestino, int unPeso = 1) : origen(unOrigen), destino(unDestino), peso(unPeso) {}
 };
 
+template <class T>
 struct nodoLista
 {
-    Arista dato;
+    T dato;
     nodoLista *sig;
-    nodoLista(Arista &unDato) : dato(unDato), sig(0){};
-    nodoLista(Arista &unDato, nodoLista *unSig) : dato(unDato), sig(unSig){};
+    nodoLista(T &unDato) : dato(unDato), sig(0){};
+    nodoLista(T &unDato, nodoLista *unSig) : dato(unDato), sig(unSig){};
 };
 
 class GrafoListaAdy
 {
 private:
-    nodoLista **listaAdy; // represetnacion del grafo con listas
-    int V;                // cantidad de vertices
-    int A;                // cantidad de arsitas
+    nodoLista<Arista> **listaAdy; // represetnacion del grafo con listas
+    int V;                        // cantidad de vertices
+    int A;                        // cantidad de arsitas
 
     bool esDirigido;  // indica si el grafo es dirigido
     bool esPonderado; // indica si el grafo es ponderado
@@ -204,7 +205,7 @@ public:
         this->esDirigido = esDirigido;
         this->esPonderado = esPonderado;
 
-        this->listaAdy = new nodoLista *[V + 1];
+        this->listaAdy = new nodoLista<Arista> *[V + 1];
         for (int i = 1; i <= V; i++)
         {
             this->listaAdy[i] = NULL; // inicializa todas las listas como vacias
@@ -215,12 +216,12 @@ public:
     {
         int pesoArista = this->esPonderado ? peso : 1; // en el caso de ser ponderado se toma en cuenta el parametro
         Arista a1(v, w, pesoArista);
-        listaAdy[v] = new nodoLista(a1, listaAdy[v]); // se agrega al ppio de la lista de los adyacentes al veritce v
+        listaAdy[v] = new nodoLista<Arista>(a1, listaAdy[v]); // se agrega al ppio de la lista de los adyacentes al veritce v
         this->A++;
         if (!esDirigido) // en caso de no ser dirigido podemos duplicar la arista hacia el otro sentido w->v
         {
             Arista a2(w, v, pesoArista);
-            listaAdy[w] = new nodoLista(a2, listaAdy[w]);
+            listaAdy[w] = new nodoLista<Arista>(a2, listaAdy[w]);
         }
     }
 
@@ -228,8 +229,8 @@ public:
     void borrarArista(int v, int w)
     {
         // busco la arista en la lista de adyacencia de v
-        nodoLista *listaAux = listaAdy[v];
-        nodoLista *listaAnterior = NULL;
+        nodoLista<Arista> *listaAux = listaAdy[v];
+        nodoLista<Arista> *listaAnterior = NULL;
         while (listaAux != NULL && listaAux->dato.destino != w)
         {
             listaAnterior = listaAux;
@@ -256,7 +257,7 @@ public:
     void borrarVertice(int V)
     {
         // borro todas las aristas que salen de V
-        nodoLista *listaAuxiliar = listaAdy[V];
+        nodoLista<Arista> *listaAuxiliar = listaAdy[V];
         while (listaAuxiliar != NULL)
         {
             borrarArista(V, listaAuxiliar->dato.destino);
@@ -271,16 +272,16 @@ public:
 
     // O(V) pc
     // si bien esta funcion podria ser O(1) si retornamos la lista original, es peligroso si la manipulan => corrompiendo el grafo
-    nodoLista *adyacentesA(int origen)
+    nodoLista<Arista> *adyacentesA(int origen)
     {
         // copio la lista
-        nodoLista *listaRetorno = NULL;
-        nodoLista *listaAuxiliar = listaAdy[origen];
+        nodoLista<Arista> *listaRetorno = NULL;
+        nodoLista<Arista> *listaAuxiliar = listaAdy[origen];
 
         while (listaAuxiliar != NULL)
         {
             Arista aristaAuxiliar = listaAuxiliar->dato;
-            listaRetorno = new nodoLista(aristaAuxiliar, listaRetorno);
+            listaRetorno = new nodoLista<Arista>(aristaAuxiliar, listaRetorno);
             listaAuxiliar = listaAuxiliar->sig;
         }
 
@@ -336,19 +337,18 @@ int verticeDesconocidoDeMenorCosto(bool *visitados, int *costos, int V)
 
 void imprimirCamino(int destino, int *vengo)
 {
-    // 5<-4<-1
-    // [1,4,5]
-    cout << "[";
+    nodoLista<int> *recorrido = new nodoLista<int>(destino);
+    destino = vengo[destino];
     while (destino != -1)
     {
-        cout << destino;
-        if (vengo[destino] != -1)
-        {
-            cout << ", ";
-        }
+        recorrido = new nodoLista<int>(destino, recorrido);
         destino = vengo[destino];
     }
-    cout << "]";
+    while (recorrido != NULL)
+    {
+        cout << recorrido->dato << " ";
+        recorrido = recorrido->sig;
+    }
 }
 
 void dijkstra(GrafoListaAdy *g, int origen, int V)
@@ -356,57 +356,35 @@ void dijkstra(GrafoListaAdy *g, int origen, int V)
     bool *visitados = initVisitados(V);  // array V casilleros, todos en false
     int *costos = initCostos(origen, V); // array V casillero, todos en INF menos origen con 0
     int *vengo = initVengo(V);           // array V casilleros, todos en -1
-    Heap *heap = new Heap(V);
-    heap->insertar(origen, 0);
-    cout << "insertar" << endl;
-    int corrida = 0;
-    while (!heap->esVacio())
+    Heap<int> *heap = new Heap<int>(V);
+    heap->encolar(0, origen);
+    while (!heap->esVacia())
     {
-        corrida++;
-        int v = heap->obtenerMinimo(); // extrae el vértice de menor costo no visitado
-        heap->borrarMinimo();
+        int v = heap->minimo(); // extrae el vértice de menor costo no visitado
+        heap->desencolar();
         visitados[v] = true;
-        nodoLista *arista = g->adyacentesA(v);
-        int corridaWhile = 0;
+        nodoLista<Arista> *arista = g->adyacentesA(v);
         while (arista != NULL)
         {
-            corridaWhile++;
-            cout << "1: "
-                 << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
             int w = arista->dato.destino;
             int peso = arista->dato.peso;
             // pregunto si mejoro el costo tentativo
-            cout << "2: "
-                 << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
             if (costos[w] > costos[v] + peso)
             {
-                cout << "3: "
-                     << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
                 costos[w] = costos[v] + peso;
                 vengo[w] = v;
                 if (heap->existe(w))
                 {
-                    cout << "4: "
-                         << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
                     heap->cambiarPrioridad(w, costos[w]);
-                    cout << "5: "
-                         << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
                 }
                 else
                 {
-                    cout << "6: "
-                         << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
-                    heap->insertar(w, costos[w]);
-                    cout << "7: "
-                         << "corrida: " << corrida << "corrida while: " << corridaWhile << endl;
+                    heap->encolar(costos[w], w);
                 }
             }
-            cout << "termina: "
-                 << "corrida: " << corrida << endl;
             arista = arista->sig;
         }
     }
-    cout << "xd";
     cout << costos[V] << endl;
     imprimirCamino(V, vengo);
 }
