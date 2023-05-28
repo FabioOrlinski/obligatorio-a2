@@ -211,6 +211,21 @@ public:
             this->listaAdy[i] = NULL; // inicializa todas las listas como vacias
         }
     }
+
+    ~GrafoListaAdy()
+    {
+        for (int i = 1; i <= V; i++)
+        {
+            nodoLista<Arista> *listaAuxiliar = listaAdy[i];
+            while (listaAuxiliar != nullptr)
+            {
+                nodoLista<Arista> *nodoAEliminar = listaAuxiliar;
+                listaAuxiliar = listaAuxiliar->sig;
+                delete nodoAEliminar;
+            }
+        }
+        delete[] listaAdy;
+    }
     // O(1)
     void aniadirArista(int v, int w, int peso = 1)
     {
@@ -247,7 +262,7 @@ public:
             {
                 listaAnterior->sig = listaAux->sig;
             }
-            // delete listaAux;
+            delete listaAux;
             this->A--;
         }
         // si no la encontre no hago nada
@@ -263,6 +278,7 @@ public:
             borrarArista(V, listaAuxiliar->dato.destino);
             listaAuxiliar = listaAuxiliar->sig;
         }
+        delete listaAuxiliar;
         // borro todas las aristas que llegan a V
         for (int i = 1; i <= this->V; i++)
         {
@@ -346,8 +362,9 @@ void imprimirCamino(int destino, int *vengo)
     }
     while (recorrido != NULL)
     {
-        cout << recorrido->dato << " ";
+        nodoLista<int> *temp = recorrido;
         recorrido = recorrido->sig;
+        delete temp;
     }
 }
 

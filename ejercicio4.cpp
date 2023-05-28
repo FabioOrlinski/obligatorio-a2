@@ -46,6 +46,7 @@ int main()
   int origen, destino;
   cin >> origen >> destino;
   dijkstra(g, origen, destino);
+  delete g;
   return 0;
 }
 // g++ -g ejercicio4.cpp (para debbuger)
