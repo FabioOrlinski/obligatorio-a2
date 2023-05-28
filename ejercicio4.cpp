@@ -6,9 +6,9 @@ using namespace std;
 
 int main()
 {
-  // ifstream myFile("Pruebas/Ejercicio4/10.in.txt");
+  // ifstream myFile("Pruebas/Ejercicio4/100.in.txt");
   // cin.rdbuf(myFile.rdbuf());
-  // ofstream myFile2("Pruebas/Ejercicio4/10.prueba.txt");
+  // ofstream myFile2("Pruebas/Ejercicio4/100.prueba.txt");
   // cout.rdbuf(myFile2.rdbuf());
   int V, E;
   cin >> V;

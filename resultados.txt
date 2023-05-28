@@ -1,3 +1,5 @@
-ejercicio4 prueba 10 resultado OK
+ejercicio4 prueba 10 resultado ERROR
 ejercicio4 prueba 100 resultado ERROR
 ejercicio4 prueba 1000 resultado ERROR
+ejercicio4 prueba 10000 resultado ERROR
+ejercicio4 prueba 100000 resultado ERROR

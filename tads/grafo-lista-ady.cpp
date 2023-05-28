@@ -137,6 +137,10 @@ public:
 
     bool existe(T elemento)
     {
+        if (elemento == 100)
+        {
+            cout << "hola";
+        }
         for (int i = 0; i < tope; i++)
         {
             if (this->heap[i]->dato == elemento)
@@ -386,22 +390,30 @@ void dijkstra(GrafoListaAdy *g, int origen, int V)
             int w = arista->dato.destino;
             int peso = arista->dato.peso;
             // pregunto si mejoro el costo tentativo
+            cout << "entro if" << endl;
             if (costos[w] > costos[v] + peso)
             {
                 costos[w] = costos[v] + peso;
                 vengo[w] = v;
+                cout << "existe entra: " << w << endl;
                 if (heap->existe(w))
                 {
+                    cout << "cambiarPrioridad entra" << endl;
                     heap->cambiarPrioridad(w, costos[w]);
+                    cout << "cambiarPrioridad sale" << endl;
                 }
                 else
                 {
+                    cout << "encolar entra" << endl;
                     heap->encolar(costos[w], w);
+                    cout << "encolar sale" << endl;
                 }
             }
             arista = arista->sig;
+            cout << "salgo if" << endl;
         }
     }
+    delete heap;
     cout << costos[V] << endl;
     imprimirCamino(V, vengo);
 }
