@@ -8,21 +8,20 @@ using namespace std;
 
 int main()
 {
-   ifstream myFile("pruebas/pruebaej1.in.txt");
-    cin.rdbuf(myFile.rdbuf());
-    // Si desean tirar la salida a un archivo, usen las siguientes líneas (si no, sáquenlas):
-    ofstream myFile2("pruebas/pruebaej1.out.txt");
-    cout.rdbuf(myFile2.rdbuf());
+  // ifstream myFile("Pruebas/Ejercicio1/10.in.txt");
+  // cin.rdbuf(myFile.rdbuf());
+  // ofstream myFile2("Pruebas/Ejercicio1/10.prueba.txt");
+  // cout.rdbuf(myFile2.rdbuf());
   int cantAlumnos;
   cin >> cantAlumnos;
-  HashCerrado *hash = new HashCerrado(cantAlumnos);//, fHash);
+  HashCerrado *hash = new HashCerrado(cantAlumnos); //, fHash);
   Lista<string> *lista = new Lista<string>();
   string nombre;
   float cantMaterias;
   int nota;
   for (int i = 0; i < cantAlumnos; i++)
   {
-    int total=0;
+    int total = 0;
     cin >> nombre;
     lista->insertarFin(nombre);
     cin >> cantMaterias;
@@ -31,7 +30,7 @@ int main()
       cin >> nota;
       total += nota;
     }
-    total = int(round(total / cantMaterias));
+    total = int(floor(total / cantMaterias));
     Asociacion *as = new Asociacion(nombre, total);
     hash->agregar(as);
   }
@@ -40,6 +39,6 @@ int main()
     hash->imprimir(lista->primero());
     lista->borrar(lista->primero());
   }
-  
+
   return 0;
 }
