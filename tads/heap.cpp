@@ -1,171 +1,170 @@
 #include <iostream>
-#include <string>
-#include <iomanip>
-// #include ".\lista.cpp"
+#include <fstream>
+
 using namespace std;
 
+template <class T>
 class nodoHeap
 {
 public:
-    double prioridad;
-    int largo;
-    string *pasajeros;
+  int prioridad;
+  T dato;
 
-    nodoHeap(double prioridad, int largo, string *pasajeros) : prioridad(prioridad), largo(largo), pasajeros(pasajeros) {}
-    ~nodoHeap()
-    {
-        delete[] pasajeros;
-    }
+  nodoHeap(int prioridad, T dato) : prioridad(prioridad), dato(dato) {}
 };
 
 template <class T>
 class Heap
 {
 private:
-    nodoHeap **heap;
-    int tope;
-    int maxElementos;
+  nodoHeap<T> **heap;
+  int tope;
+  int maxElementos;
 
-    int padre(int pos)
-    {
-        return (pos - 1) / 2;
-    }
-    int hijoIzq(int pos)
-    {
-        return pos * 2 + 1;
-    }
-    int hijoDer(int pos)
-    {
-        return pos * 2 + 2;
-    }
+  bool tengoIzq(int pos)
+  {
+    return this->tope > pos * 2 + 1;
+  }
 
-    void flotar(int pos)
-    {
-        int posPadre = padre(pos);
-        if (posPadre == pos)
-        {
-            return;
-        }
-        double valorPadre = this->heap[posPadre]->prioridad;
-        string *datoPadre = this->heap[posPadre]->pasajeros;
-        int largoPadre = this->heap[posPadre]->largo;
-        double valor = this->heap[pos]->prioridad;
-        string *dato = this->heap[pos]->pasajeros;
-        int largo = this->heap[pos]->largo;
-        if (valor > valorPadre)
-        {
-            this->heap[posPadre]->prioridad = valor;
-            this->heap[posPadre]->pasajeros = dato;
-            this->heap[posPadre]->largo = largo;
-            this->heap[pos]->prioridad = valorPadre;
-            this->heap[pos]->pasajeros = datoPadre;
-            this->heap[pos]->largo = largoPadre;
-            flotar(posPadre);
-        }
-    }
+  bool tengoDer(int pos)
+  {
+    return this->tope > pos * 2 + 2;
+  }
 
-    bool tengoIzq(int pos)
-    {
-        return this->tope > pos * 2 + 1;
-    }
+  int padre(int pos)
+  {
+    return (pos - 1) / 2;
+  }
+  int hijoIzq(int pos)
+  {
+    return pos * 2 + 1;
+  }
+  int hijoDer(int pos)
+  {
+    return pos * 2 + 2;
+  }
 
-    bool tengoDer(int pos)
+  void flotar(int pos)
+  {
+    int posPadre = padre(pos);
+    if (posPadre == pos)
     {
-        return this->tope > pos * 2 + 2;
+      return;
     }
+    float valorPadre = this->heap[posPadre]->prioridad;
+    T datoPadre = this->heap[posPadre]->dato;
+    float valor = this->heap[pos]->prioridad;
+    T dato = this->heap[pos]->dato;
+    if (valor < valorPadre)
+    {
+      this->heap[posPadre]->prioridad = valor;
+      this->heap[posPadre]->dato = dato;
+      this->heap[pos]->prioridad = valorPadre;
+      this->heap[pos]->dato = datoPadre;
+      flotar(posPadre);
+    }
+  }
 
-    void hundir(int pos)
+  void hundir(int pos)
+  {
+    float prior = this->heap[pos]->prioridad;
+    T dato = this->heap[pos]->dato;
+    if (tengoIzq(pos))
     {
-        double prior = this->heap[pos]->prioridad;
-        string *dato = this->heap[pos]->pasajeros;
-        int largo = this->heap[pos]->largo;
-        if (tengoIzq(pos))
-        {
-            int posMin = hijoIzq(pos);
-            double prioIzq = this->heap[hijoIzq(pos)]->prioridad;
-            if (tengoDer(pos) && this->heap[hijoDer(pos)]->prioridad > prioIzq)
-            {
-                posMin++;
-            }
-            if (this->heap[posMin]->prioridad > prior)
-            {
-                this->heap[pos]->prioridad = this->heap[posMin]->prioridad;
-                this->heap[pos]->largo = this->heap[posMin]->largo;
-                this->heap[pos]->pasajeros = this->heap[posMin]->pasajeros;
-                this->heap[posMin]->prioridad = prior;
-                this->heap[posMin]->pasajeros = dato;
-                this->heap[posMin]->largo = largo;
-                hundir(posMin);
-            }
-        }
+      int posMin = hijoIzq(pos);
+      int prioIzq = this->heap[hijoIzq(pos)]->prioridad;
+      if (tengoDer(pos) && this->heap[hijoDer(pos)]->prioridad < prioIzq)
+      {
+        posMin++;
+      }
+      if (this->heap[posMin]->prioridad <= prior)
+      {
+        this->heap[pos]->prioridad = this->heap[posMin]->prioridad;
+        this->heap[pos]->dato = this->heap[posMin]->dato;
+        this->heap[posMin]->prioridad = prior;
+        this->heap[posMin]->dato = dato;
+        hundir(posMin);
+      }
     }
+  }
 
 public:
-    Heap(int maxElementos)
-    {
-        this->maxElementos = maxElementos;
-        this->tope = 0;
-        this->heap = new nodoHeap *[this->maxElementos];
-    }
-    ~Heap()
-    {
-        for (int i = 0; i < tope; delete this->heap[i++])
-            ;
-        delete[] this->heap;
-    }
+  Heap(int maxElementos)
+  {
+    this->maxElementos = maxElementos;
+    this->tope = 0;
+    this->heap = new nodoHeap<T> *[this->maxElementos];
+  }
+  ~Heap()
+  {
+    for (int i = 0; i < tope; delete this->heap[i++])
+      ;
+    delete[] this->heap;
+  }
 
-    void encolar(double prioridad, string *pasajeros, int largo)
-    {
-        this->heap[tope] = new nodoHeap(prioridad, largo, pasajeros);
-        this->flotar(this->tope++);
-    }
+  void encolar(int prioridad, T dato)
+  {
+    this->heap[tope] = new nodoHeap<T>(prioridad, dato);
+    this->flotar(this->tope++);
+  }
 
-    // Pre: !EsVacia()
-    void desencolar()
+  // Pre: !EsVacia()
+  void desencolar()
+  {
+    delete this->heap[0];
+    this->heap[0] = this->heap[--this->tope];
+    hundir(0);
+  }
+
+  // Pre: !EsVacia()
+  T minimo()
+  {
+    return this->heap[0]->dato;
+  }
+
+  bool esVacia()
+  {
+    return this->tope == 0;
+  }
+
+  int largo()
+  {
+    return this->tope;
+  }
+
+  bool existe(T elemento)
+  {
+    if (elemento == 100)
     {
-        if (this->heap[0]->prioridad != (int)this->heap[0]->prioridad)
+      cout << "hola";
+    }
+    for (int i = 0; i < tope; i++)
+    {
+      if (this->heap[i]->dato == elemento)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void cambiarPrioridad(T elemento, int nuevaPrioridad)
+  {
+    for (int i = 0; i < tope; i++)
+    {
+      if (this->heap[i]->dato == elemento)
+      {
+        this->heap[i]->prioridad = nuevaPrioridad;
+        if (nuevaPrioridad < this->heap[padre(i)]->prioridad)
         {
-
-            cout << fixed << setprecision(2) << this->heap[0]->prioridad << " ";
-            cout << fixed << setprecision(0);
+          flotar(i);
         }
         else
         {
-
-            cout << this->heap[0]->prioridad << " ";
+          hundir(i);
         }
-        int largo = this->heap[0]->largo;
-        for (int i = 0; i < largo; i++)
-        {
-            cout << this->heap[0]->pasajeros[i] << " ";
-        }
-        cout << endl;
-        delete this->heap[0];
-        this->heap[0] = this->heap[--this->tope];
-        hundir(0);
+        break;
+      }
     }
-
-    // Pre: !EsVacia()
-    // T minimo()
-    //{
-    //    return this->heap[0];
-    //}
-
-    bool esVacia()
-    {
-        return this->tope == 0;
-    }
-
-    int largo()
-    {
-        return this->tope;
-    }
-
-    void mostrar()
-    {
-        for (int i = 0; i < tope; i++)
-        {
-            cout << this->heap[i]->prioridad << endl;
-        }
-    }
+  }
 };

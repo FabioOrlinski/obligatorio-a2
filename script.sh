@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ejercicios=("ejercicio4")
-archivos=("10" "100" "1000" "10000" "100000")
+ejercicios=("ejercicio5")
+archivos=("tops1" "tops2" "tops3" "tops4" "tops5" "tops6" "tops7")
 # ejercicios=("ejercicio4")
 # archivos=("5")
 

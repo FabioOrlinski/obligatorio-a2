@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
-#include ".\tads\heap.cpp"
-// #include ".\tads\lista.cpp"
+#include ".\tads\heap-ej3.cpp"
+
 using namespace std;
 
 int main()

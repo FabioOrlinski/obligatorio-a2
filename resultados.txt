@@ -1,5 +1,7 @@
-ejercicio4 prueba 10 resultado ERROR
-ejercicio4 prueba 100 resultado ERROR
-ejercicio4 prueba 1000 resultado ERROR
-ejercicio4 prueba 10000 resultado ERROR
-ejercicio4 prueba 100000 resultado ERROR
+ejercicio5 prueba tops1 resultado OK
+ejercicio5 prueba tops2 resultado OK
+ejercicio5 prueba tops3 resultado OK
+ejercicio5 prueba tops4 resultado OK
+ejercicio5 prueba tops5 resultado OK
+ejercicio5 prueba tops6 resultado ERROR
+ejercicio5 prueba tops7 resultado ERROR
