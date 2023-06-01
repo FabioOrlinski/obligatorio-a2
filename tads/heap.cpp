@@ -134,10 +134,6 @@ public:
 
   bool existe(T elemento)
   {
-    if (elemento == 100)
-    {
-      cout << "hola";
-    }
     for (int i = 0; i < tope; i++)
     {
       if (this->heap[i]->dato == elemento)

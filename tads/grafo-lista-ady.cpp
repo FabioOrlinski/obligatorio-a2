@@ -31,7 +31,71 @@ private:
     int A;                        // cantidad de arsitas
 
     bool esDirigido;  // indica si el grafo es dirigido
-    bool esPonderado; // indica si el grafo es ponderado
+    bool esPonderado; // indica si el grafo es
+
+    bool *initVisitados(int V)
+    {
+        bool *ret = new bool[V + 1]();
+        for (int i = 1; i <= V; i++)
+        {
+            ret[i] = false;
+        }
+        return ret;
+    }
+
+    int *initCostos(int origen, int V)
+    {
+        int *ret = new int[V + 1]();
+        for (int i = 1; i <= V; i++)
+        {
+            ret[i] = INF;
+        }
+        ret[origen] = 0;
+        return ret;
+    }
+
+    int *initVengo(int V)
+    {
+        int *ret = new int[V + 1]();
+        for (int i = 1; i <= V; i++)
+        {
+            ret[i] = -1;
+        }
+        return ret;
+    }
+
+    int verticeDesconocidoDeMenorCosto(bool *visitados, int *costos, int V)
+    {
+        int menor = -1;
+        int costoMenorHastaElMomento = INF;
+        for (int i = 1; i <= V; i++)
+        {
+            if (!visitados[i] && costos[i] < costoMenorHastaElMomento)
+            {
+                menor = i;
+                costoMenorHastaElMomento = costos[i];
+            }
+        }
+        return menor;
+    }
+
+    void imprimirCamino(int destino, int *vengo)
+    {
+        nodoLista<int> *recorrido = new nodoLista<int>(destino);
+        destino = vengo[destino];
+        while (destino != -1)
+        {
+            recorrido = new nodoLista<int>(destino, recorrido);
+            destino = vengo[destino];
+        }
+        while (recorrido != NULL)
+        {
+            nodoLista<int> *temp = recorrido;
+            cout << recorrido->dato << " ";
+            recorrido = recorrido->sig;
+            delete temp;
+        }
+    }
 
 public:
     // Crea un grafo con V vertices (del 1 al V)
@@ -107,20 +171,13 @@ public:
     }
 
     // O(V + A)
-    void borrarVertice(int V)
+    void borrarVertice(int VerticeABorrar)
     {
-        // borro todas las aristas que salen de V
-        nodoLista<Arista> *listaAuxiliar = listaAdy[V];
-        while (listaAuxiliar != NULL)
-        {
-            borrarArista(V, listaAuxiliar->dato.destino);
-            listaAuxiliar = listaAuxiliar->sig;
-        }
-        delete listaAuxiliar;
         // borro todas las aristas que llegan a V
         for (int i = 1; i <= this->V; i++)
         {
-            borrarArista(i, V);
+            borrarArista(i, VerticeABorrar);
+            borrarArista(VerticeABorrar, i);
         }
     }
 
@@ -141,113 +198,50 @@ public:
 
         return listaRetorno;
     }
-};
 
-bool *initVisitados(int V)
-{
-    bool *ret = new bool[V + 1]();
-    for (int i = 1; i <= V; i++)
+    void dijkstra(int origen, int destino)
     {
-        ret[i] = false;
-    }
-    return ret;
-}
-
-int *initCostos(int origen, int V)
-{
-    int *ret = new int[V + 1]();
-    for (int i = 1; i <= V; i++)
-    {
-        ret[i] = INF;
-    }
-    ret[origen] = 0;
-    return ret;
-}
-
-int *initVengo(int V)
-{
-    int *ret = new int[V + 1]();
-    for (int i = 1; i <= V; i++)
-    {
-        ret[i] = -1;
-    }
-    return ret;
-}
-
-int verticeDesconocidoDeMenorCosto(bool *visitados, int *costos, int V)
-{
-    int menor = -1;
-    int costoMenorHastaElMomento = INF;
-    for (int i = 1; i <= V; i++)
-    {
-        if (!visitados[i] && costos[i] < costoMenorHastaElMomento)
+        bool *visitados = initVisitados(V);  // array V casilleros, todos en false
+        int *costos = initCostos(origen, V); // array V casillero, todos en INF menos origen con 0
+        int *vengo = initVengo(V);           // array V casilleros, todos en -1
+        Heap<int> *heap = new Heap<int>(V);
+        heap->encolar(0, origen);
+        while (!heap->esVacia())
         {
-            menor = i;
-            costoMenorHastaElMomento = costos[i];
-        }
-    }
-    return menor;
-}
-
-void imprimirCamino(int destino, int *vengo)
-{
-    nodoLista<int> *recorrido = new nodoLista<int>(destino);
-    destino = vengo[destino];
-    while (destino != -1)
-    {
-        recorrido = new nodoLista<int>(destino, recorrido);
-        destino = vengo[destino];
-    }
-    while (recorrido != NULL)
-    {
-        nodoLista<int> *temp = recorrido;
-        recorrido = recorrido->sig;
-        delete temp;
-    }
-}
-
-void dijkstra(GrafoListaAdy *g, int origen, int V)
-{
-    bool *visitados = initVisitados(V);  // array V casilleros, todos en false
-    int *costos = initCostos(origen, V); // array V casillero, todos en INF menos origen con 0
-    int *vengo = initVengo(V);           // array V casilleros, todos en -1
-    Heap<int> *heap = new Heap<int>(V);
-    heap->encolar(0, origen);
-    while (!heap->esVacia())
-    {
-        int v = heap->minimo(); // extrae el vértice de menor costo no visitado
-        heap->desencolar();
-        visitados[v] = true;
-        nodoLista<Arista> *arista = g->adyacentesA(v);
-        while (arista != NULL)
-        {
-            int w = arista->dato.destino;
-            int peso = arista->dato.peso;
-            // pregunto si mejoro el costo tentativo
-            cout << "entro if" << endl;
-            if (costos[w] > costos[v] + peso)
+            int v = heap->minimo(); // extrae el vértice de menor costo no visitado
+            heap->desencolar();
+            visitados[v] = true;
+            nodoLista<Arista> *arista = this->adyacentesA(v);
+            while (arista != NULL)
             {
-                costos[w] = costos[v] + peso;
-                vengo[w] = v;
-                cout << "existe entra: " << w << endl;
-                if (heap->existe(w))
+                int w = arista->dato.destino;
+                int peso = arista->dato.peso;
+                // pregunto si mejoro el costo tentativo
+                // cout << "entro if" << endl;
+                if (costos[w] > costos[v] + peso)
                 {
-                    cout << "cambiarPrioridad entra" << endl;
-                    heap->cambiarPrioridad(w, costos[w]);
-                    cout << "cambiarPrioridad sale" << endl;
+                    costos[w] = costos[v] + peso;
+                    vengo[w] = v;
+                    // cout << "existe entra: " << w << endl;
+                    if (heap->existe(w))
+                    {
+                        // cout << "cambiarPrioridad entra" << endl;
+                        heap->cambiarPrioridad(w, costos[w]);
+                        // cout << "cambiarPrioridad sale" << endl;
+                    }
+                    else
+                    {
+                        // cout << "encolar entra" << endl;
+                        heap->encolar(costos[w], w);
+                        // cout << "encolar sale" << endl;
+                    }
                 }
-                else
-                {
-                    cout << "encolar entra" << endl;
-                    heap->encolar(costos[w], w);
-                    cout << "encolar sale" << endl;
-                }
+                arista = arista->sig;
+                // cout << "salgo if" << endl;
             }
-            arista = arista->sig;
-            cout << "salgo if" << endl;
         }
+        delete heap;
+        cout << costos[destino] << endl;
+        imprimirCamino(destino, vengo);
     }
-    delete heap;
-    cout << costos[V] << endl;
-    imprimirCamino(V, vengo);
-}
+};
