@@ -8,17 +8,11 @@ using namespace std;
 class Arista
 {
 public:
-    int costo, origen, destino;
+    int costo;
     bool existe;
-    Arista(int costo, int origen, int destino) : costo(costo), origen(origen), destino(destino), existe(true) {}
     Arista(int costo) : costo(costo), existe(true) {}
     Arista() : costo(0), existe(false) {}
 };
-
-int fComp(Arista *a, Arista *b)
-{
-    return a->costo - b->costo;
-}
 
 class Grafo
 {
@@ -38,15 +32,12 @@ public:
         {
             this->matAdy[i] = new Arista *[tope];
         }
-
         if (esDirigido)
         {
             for (int i = 0; i < tope; i++)
             {
                 for (int j = 0; j < tope; j++)
-                {
                     this->matAdy[i][j] = new Arista();
-                }
             }
         }
         else
@@ -76,20 +67,24 @@ public:
 
     void *ordenTopologico(int *cantIncidencias)
     {
-        int prioridad = 0;
+        int nivel = this->tope + 1;
+        int cantidadNivelActual = 0;
+        int cantidadSiguienteNivel = 0;
         Heap<int> *heap = new Heap<int>(tope);
         // Inicializar la cola de prioridad con los nodos de grado de entrada cero
         for (int i = 1; i < tope; i++)
         {
             if (cantIncidencias[i] == 0)
             {
-                heap->encolar(prioridad++, i);
+                heap->encolar(i, i);
+                cantidadNivelActual++;
             }
         }
         while (!heap->esVacia())
         {
             int v = heap->minimo(); // extrae el siguiente vertice sin incidencias
             heap->desencolar();
+            cantidadNivelActual--;
             cantIncidencias[v] = -1;
             cout << v << endl;
             for (int w = 0; w < tope; w++)
@@ -99,16 +94,18 @@ public:
                     cantIncidencias[w]--;
                     if (cantIncidencias[w] == 0)
                     {
-                        heap->encolar(prioridad++, w);
+                        heap->encolar(w + nivel, w);
+                        cantidadSiguienteNivel++;
                     }
                 }
+            }
+            if (cantidadNivelActual == 0)
+            {
+                nivel += this->tope + 1;
+                cantidadNivelActual = cantidadSiguienteNivel;
+                cantidadSiguienteNivel = 0;
             }
         }
         delete heap;
     }
 };
-
-// 1 -> 4
-// 2 -> 3
-// 4
-// 3

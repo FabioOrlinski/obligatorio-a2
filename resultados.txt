@@ -3,5 +3,5 @@ ejercicio5 prueba tops2 resultado OK
 ejercicio5 prueba tops3 resultado OK
 ejercicio5 prueba tops4 resultado OK
 ejercicio5 prueba tops5 resultado OK
-ejercicio5 prueba tops6 resultado ERROR
-ejercicio5 prueba tops7 resultado ERROR
+ejercicio5 prueba tops6 resultado OK
+ejercicio5 prueba tops7 resultado OK

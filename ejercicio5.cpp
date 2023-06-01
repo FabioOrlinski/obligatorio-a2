@@ -8,10 +8,6 @@ using namespace std;
 
 int main()
 {
-  // ifstream myFile("Pruebas/Ejercicio5/tops4.in.txt");
-  // cin.rdbuf(myFile.rdbuf());
-  // ofstream myFile2("Pruebas/Ejercicio5/tops4.prueba.txt");
-  // cout.rdbuf(myFile2.rdbuf());
   int V, E;
   cin >> V;
   Grafo *g = new Grafo(V + 1, true);
