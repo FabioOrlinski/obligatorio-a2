@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ejercicios=("ejercicio4")
+ejercicios=("ejercicio6")
 archivos=("10" "100" "1000" "10000" "100000")
 
 # Crear archivo de resultados
