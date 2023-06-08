@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ejercicios=("ejercicio6")
-archivos=("10" "100" "1000" "10000" "100000")
+ejercicios=("ejercicio10")
+archivos=("facu10e1")
 
 # Crear archivo de resultados
 > resultados.txt
