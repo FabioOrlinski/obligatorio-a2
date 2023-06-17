@@ -1,5 +1,1 @@
-ejercicio6 prueba 10 resultado OK
-ejercicio6 prueba 100 resultado OK
-ejercicio6 prueba 1000 resultado OK
-ejercicio6 prueba 10000 resultado OK
-ejercicio6 prueba 100000 resultado OK
+ejercicio10 prueba facu10e1 resultado ERROR
