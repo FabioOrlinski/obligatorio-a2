@@ -15,8 +15,7 @@ bool esSolucion(int x1, int y1, int x2, int y2)
 bool esAceptable(bool **visitados, string **plano, int x1, int y1, int x, int y)
 {
   // me fijo si ya lo visite, o si es pared, o si se sale del plano
-  return !visitados[x1][y1] && plano[x1][y1] != "P" && x1 >= 0 && y1 >= 0 && x1 < x && y1 < y;
-}
+  return x1 >= 0 && y1 >= 0 && x1 < x && y1 < y && !visitados[x1][y1] && plano[x1][y1] != "P";}
 
 void backTracking(string **plano, int x1, int y1, int x2, int y2, bool **visitados, int pasos, int &pasosOptimo, int x, int y)
 {
@@ -106,12 +105,12 @@ int main()
       continue;
     }
     backTracking(plano, xBedelia, yBedelia, x2 - 1, y2 - 1, visitadosParaClase, 0, pasosOptimosAClase, x, y);
-    if (pasosOptimoABedelia == INF)
+    if (pasosOptimosAClase == INF)
     {
       cout << "0" << endl;
       continue;
     }
-    cout << pasosOptimoABedelia + pasosOptimosAClase << endl;
+    cout << pasosOptimoABedelia + pasosOptimosAClase + 1 << endl;
   }
   return 0;
 }

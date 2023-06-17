@@ -1,1 +1,1 @@
-ejercicio10 prueba facu10e1 resultado ERROR
+ejercicio10 prueba facu10e1 resultado OK
