@@ -20,21 +20,27 @@ void mochilaDP(Elemento **elementos, int cantArchivos, int maximoTamano, int max
   // lleno una arista de la matriz con 0s
   for (int i = 0; i < cantArchivos; i++) {
       matDP[i] = new int*[maximoTamano+1];
-        for (int j = 0; j < maximoTamano; j++){
+        for (int j = 0; j < maximoTamano+1; j++){
         matDP[i][j] = new int [maximoLineasCodigo+1];
         matDP[i][j][0] = 0;
         }
   }
   for (int j = 1; j <= maximoTamano; j++) {
     for (int k = 1; k <= maximoLineasCodigo; k++) {
-      matDP[0][j][k] = ((j / elementos[0]->tamano) && (k/ elementos[0]->lineasCodigo)) ? elementos[0]->puntaje : 0;
+      bool condicionTamano= j / elementos[0]->tamano >=1;
+      bool condicionLineas= k/ elementos[0]->lineasCodigo >=1;
+      matDP[0][j][k] = (condicionTamano && condicionLineas) ? elementos[0]->puntaje : 0;
     }
   }
 
   for (int i = 1; i < cantArchivos; i++) {
     for (int j = 1; j <= maximoTamano; j++) {
         for (int k = 1; k <= maximoLineasCodigo; k++) {
-          matDP[i][j][k] = ((j < elementos[i]->tamano) && (k < elementos[i]->lineasCodigo)) ? matDP[i-1][j-1][k] :
+          bool condicionTamano= j / elementos[0]->tamano >=1;
+          bool condicionLineas= k/ elementos[0]->lineasCodigo >=1;
+          int valorAnt = matDP[i-1][j-1][k];
+//int posibleValor =elementos[i]->puntaje + matDP[i][j-elementos[i]->tamano][k-elementos[i]->lineasCodigo];
+          matDP[i][j][k] = ((j < elementos[i]->tamano) || (k < elementos[i]->lineasCodigo)) ? matDP[i-1][j-1][k] :
               max(matDP[i-1][j-1][k], elementos[i]->puntaje + matDP[i][j-elementos[i]->tamano][k-elementos[i]->lineasCodigo]);
         }
     }
@@ -44,10 +50,10 @@ void mochilaDP(Elemento **elementos, int cantArchivos, int maximoTamano, int max
 
 int main()
 {
-  ifstream myFile("Pruebas/Ejercicio7/10.in.txt");
-  cin.rdbuf(myFile.rdbuf());
-  ofstream myFile2("Pruebas/Ejercicio7/10.prueba.txt");
-  cout.rdbuf(myFile2.rdbuf());
+  //ifstream myFile("Pruebas/Ejercicio7/10.in.txt");
+  //cin.rdbuf(myFile.rdbuf());
+  //ofstream myFile2("Pruebas/Ejercicio7/10.prueba.txt");
+  //cout.rdbuf(myFile2.rdbuf());
   int cantArchivos, maximoTamano, maximoLineasCodigo;
   cin >> cantArchivos >> maximoTamano >> maximoLineasCodigo;
   Elemento **elementos = new Elemento *[cantArchivos];
