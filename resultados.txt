@@ -1,4 +1,4 @@
-ejercicio7 prueba 10 resultado OK
+ejercicio7 prueba 10 resultado ERROR
 ejercicio7 prueba 100 resultado ERROR
 ejercicio7 prueba 1000 resultado ERROR
 ejercicio7 prueba 10000 resultado ERROR
