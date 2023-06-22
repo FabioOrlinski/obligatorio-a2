@@ -1,3 +1,1 @@
-ejercicio9 prueba coef10e1 resultado OK
-ejercicio9 prueba coef10e2 resultado OK
-ejercicio9 prueba coef10e3 resultado OK
+ejercicio10 prueba facu10e1 resultado OK

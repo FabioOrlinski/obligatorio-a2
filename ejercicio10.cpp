@@ -53,10 +53,10 @@ void backTracking(string **plano, int x1, int y1, int x2, int y2, bool **visitad
 
 int main()
 {
-  ifstream myFile("Pruebas/Ejercicio10/facu10e1.in.txt");
-  cin.rdbuf(myFile.rdbuf());
-  ofstream myFile2("Pruebas/Ejercicio10/facu10e1.prueba.txt");
-  cout.rdbuf(myFile2.rdbuf());
+  // ifstream myFile("Pruebas/Ejercicio10/facu10e1.in.txt");
+  // cin.rdbuf(myFile.rdbuf());
+  // ofstream myFile2("Pruebas/Ejercicio10/facu10e1.prueba.txt");
+  // cout.rdbuf(myFile2.rdbuf());
   int x, y, xBedelia, yBedelia;
   cin >> x >> y;
   string **plano = new string *[x];
@@ -111,6 +111,19 @@ int main()
       continue;
     }
     cout << pasosOptimoABedelia + pasosOptimosAClase + 1 << endl;
+    // liberacion de memoria
+    for (int i = 0; i < x; i++)
+    {
+      delete[] visitadosParaBedelia[i];
+      delete[] visitadosParaClase[i];
+    }
+    delete[] visitadosParaBedelia;
+    delete[] visitadosParaClase;
   }
+  for (int i = 0; i < x; i++)
+    {
+      delete[] plano[i];
+    }
+    delete[] plano;
   return 0;
 }
