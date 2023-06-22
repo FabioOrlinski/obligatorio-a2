@@ -36,5 +36,6 @@ int main()
     }
     cout << coeficientesBinomiales[K] << endl;
   }
+  delete[] coeficientesBinomiales;
   return 0;
 }

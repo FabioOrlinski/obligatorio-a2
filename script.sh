@@ -2,8 +2,8 @@
 
 # ejercicios=("ejercicio7")
 # archivos=("10" "100" "1000" "10000")
-ejercicios=("ejercicio5")
-archivos=("tops1" "tops2" "tops3" "tops4" "tops5" "tops6" "tops7")
+ejercicios=("ejercicio9")
+archivos=("coef10e1" "coef10e2" "coef10e3")
 
 # Crear archivo de resultados
 > resultados.txt

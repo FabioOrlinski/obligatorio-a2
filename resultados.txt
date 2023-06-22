@@ -1,7 +1,3 @@
-ejercicio5 prueba tops1 resultado OK
-ejercicio5 prueba tops2 resultado OK
-ejercicio5 prueba tops3 resultado OK
-ejercicio5 prueba tops4 resultado OK
-ejercicio5 prueba tops5 resultado OK
-ejercicio5 prueba tops6 resultado OK
-ejercicio5 prueba tops7 resultado OK
+ejercicio9 prueba coef10e1 resultado OK
+ejercicio9 prueba coef10e2 resultado OK
+ejercicio9 prueba coef10e3 resultado OK
