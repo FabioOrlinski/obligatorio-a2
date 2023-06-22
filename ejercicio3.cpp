@@ -7,10 +7,10 @@ using namespace std;
 
 int main()
 {
-    ifstream myFile("Pruebas/Ejercicio3/10000.in.txt");
-    cin.rdbuf(myFile.rdbuf());
-    ofstream myFile2("Pruebas/Ejercicio3/10000.prueba.txt");
-    cout.rdbuf(myFile2.rdbuf());
+    // ifstream myFile("Pruebas/Ejercicio3/10000.in.txt");
+    // cin.rdbuf(myFile.rdbuf());
+    // ofstream myFile2("Pruebas/Ejercicio3/10000.prueba.txt");
+    // cout.rdbuf(myFile2.rdbuf());
     int reservas;
     int cantPer;
 
@@ -40,6 +40,6 @@ int main()
     {
         heap->desencolar();
     }
-
+    delete heap;
     return 0;
 }

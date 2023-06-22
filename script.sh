@@ -2,8 +2,8 @@
 
 # ejercicios=("ejercicio7")
 # archivos=("10" "100" "1000" "10000")
-ejercicios=("ejercicio2")
-archivos=("10" "100" "1000" "10000" "162793")
+ejercicios=("ejercicio3")
+archivos=("1" "10" "100" "1000" "10000" "100000")
 
 # Crear archivo de resultados
 > resultados.txt
