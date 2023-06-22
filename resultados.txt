@@ -3,3 +3,4 @@ ejercicio1 prueba 100 resultado OK
 ejercicio1 prueba 1000 resultado OK
 ejercicio1 prueba 10000 resultado OK
 ejercicio1 prueba 100000 resultado OK
+ejercicio1 prueba 1000000 resultado OK

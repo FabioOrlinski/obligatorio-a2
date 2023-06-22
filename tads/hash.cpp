@@ -46,7 +46,7 @@ private:
         int primoRandom = 37;
         for (int i = 0; i < dato.length(); i++)
         {
-            hash = hash + primoRandom * int(dato[i]);
+            hash = hash * primoRandom + int(dato[i]);
         }
 
         return hash % this->maxElementos;
@@ -84,7 +84,7 @@ public:
         int i = 1;
         while (!this->hash[pos] || this->hash[pos]->clave != nombre)
         {
-            pos = (pos +i*i) % this->maxElementos;
+            pos = (pos + i * i) % this->maxElementos;
             i++;
         }
         cout << nombre << " " << this->hash[pos]->valor << endl;
@@ -96,16 +96,9 @@ public:
         int i = 1;
         while (this->hash[pos])
         {
-            pos = (pos + i*i) % this->maxElementos;
+            pos = (pos + i * i) % this->maxElementos;
             i++;
         }
         this->hash[pos] = dato;
     }
 };
-
-// int main(){
-//     HashCerrado<int>* hash = new HashCerrado<int>(10, fHash);
-//
-//
-//     return 0;
-// }
