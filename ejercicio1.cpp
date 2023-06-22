@@ -40,5 +40,8 @@ int main()
     lista->borrar(lista->primero());
   }
 
+  delete hash;
+  delete lista;
+
   return 0;
 }

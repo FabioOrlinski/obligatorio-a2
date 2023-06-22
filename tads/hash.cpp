@@ -66,6 +66,18 @@ public:
         // this->fHash = fHash;
     }
 
+    ~HashCerrado()
+    {
+        for (int i = 0; i < this->maxElementos; i++)
+        {
+            if (this->hash[i])
+            {
+                delete this->hash[i];
+            }
+        }
+        delete[] this->hash;
+    }
+
     void imprimir(string nombre)
     {
         int pos = this->fHash(nombre);

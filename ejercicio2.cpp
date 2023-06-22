@@ -47,29 +47,19 @@ es 1
 
 using namespace std;
 
-// Definición de la estructura del nodo AVL
-struct NodoAVL
+class NodoAVL
 {
-  string palabra;
-  int altura;
-  NodoAVL *izquierda;
-  NodoAVL *derecha;
-  int conteo;
+  public:
+    string palabra;
+    int altura;
+    NodoAVL *izquierda;
+    NodoAVL *derecha;
+    int conteo;
+
+    NodoAVL(string palabra, int altura, NodoAVL *izquierda, NodoAVL *derecha, int conteo): palabra(palabra), altura(altura), izquierda(izquierda), derecha(derecha), conteo(conteo){};
+    NodoAVL(string palabra): palabra(palabra), altura(1), izquierda(nullptr), derecha(nullptr), conteo(1){};
 };
 
-// Función para crear un nuevo nodo AVL
-NodoAVL *crearNodoAVL(string palabra)
-{
-  NodoAVL *nuevoNodo = new NodoAVL();
-  nuevoNodo->palabra = palabra;
-  nuevoNodo->altura = 1;
-  nuevoNodo->conteo = 1;
-  nuevoNodo->izquierda = nullptr;
-  nuevoNodo->derecha = nullptr;
-  return nuevoNodo;
-}
-
-// Función para obtener la altura de un nodo AVL
 int obtenerAltura(NodoAVL *nodo)
 {
   if (nodo == nullptr)
@@ -79,13 +69,11 @@ int obtenerAltura(NodoAVL *nodo)
   return nodo->altura;
 }
 
-// Función para obtener el máximo de dos números enteros
 int maximo(int a, int b)
 {
   return (a > b) ? a : b;
 }
 
-// Función para obtener el factor de balance de un nodo AVL
 int obtenerFactorBalance(NodoAVL *nodo)
 {
   if (nodo == nullptr)
@@ -95,7 +83,6 @@ int obtenerFactorBalance(NodoAVL *nodo)
   return obtenerAltura(nodo->izquierda) - obtenerAltura(nodo->derecha);
 }
 
-// Función para rotar un subárbol a la derecha
 NodoAVL *rotarDerecha(NodoAVL *z)
 {
   NodoAVL *y = z->izquierda;
@@ -109,8 +96,6 @@ NodoAVL *rotarDerecha(NodoAVL *z)
 
   return y;
 }
-
-// Función para rotar un subárbol a la izquierda
 NodoAVL *rotarIzquierda(NodoAVL *y)
 {
   NodoAVL *x = y->derecha;
@@ -124,14 +109,12 @@ NodoAVL *rotarIzquierda(NodoAVL *y)
 
   return x;
 }
-
-// Función para insertar una palabra en el árbol AVL
 NodoAVL *insertarPalabraAVL(NodoAVL *nodo, string palabra)
 {
-  // Paso 1: Realizar la inserción normal de un BST
   if (nodo == nullptr)
   {
-    return crearNodoAVL(palabra);
+    NodoAVL* nuevoNodo = new NodoAVL(palabra);
+    return nuevoNodo;
   }
 
   if (palabra < nodo->palabra)
@@ -144,50 +127,41 @@ NodoAVL *insertarPalabraAVL(NodoAVL *nodo, string palabra)
   }
   else
   {
-    // La palabra ya existe en el árbol, no se permite duplicados
     nodo->conteo++;
     return nodo;
   }
-
-  // Paso 2: Actualizar la altura del nodo actual
   nodo->altura = 1 + maximo(obtenerAltura(nodo->izquierda), obtenerAltura(nodo->derecha));
-
-  // Paso 3: Obtener el factor de balance del nodo actual
   int factorBalance = obtenerFactorBalance(nodo);
 
-  // Paso 4: Realizar las rotaciones necesarias según el factor de balance
-
-  // Caso 1: Rotación a la derecha
+  // Rotación a la derecha
   if (factorBalance > 1 && palabra < nodo->izquierda->palabra)
   {
     return rotarDerecha(nodo);
   }
 
-  // Caso 2: Rotación a la izquierda
+  // Rotación a la izquierda
   if (factorBalance < -1 && palabra > nodo->derecha->palabra)
   {
     return rotarIzquierda(nodo);
   }
 
-  // Caso 3: Rotación doble a la derecha
+  // Rotación doble a la derecha
   if (factorBalance > 1 && palabra > nodo->izquierda->palabra)
   {
     nodo->izquierda = rotarIzquierda(nodo->izquierda);
     return rotarDerecha(nodo);
   }
 
-  // Caso 4: Rotación doble a la izquierda
+  // Rotación doble a la izquierda
   if (factorBalance < -1 && palabra < nodo->derecha->palabra)
   {
     nodo->derecha = rotarDerecha(nodo->derecha);
     return rotarIzquierda(nodo);
   }
 
-  // Si el factor de balance está en el rango [-1, 1], el árbol está balanceado
   return nodo;
 }
 
-// Función para imprimir el árbol AVL en orden ascendente con la cantidad de palabras repetidas
 void imprimirAVL(NodoAVL *nodo)
 {
   if (nodo != nullptr)
@@ -195,6 +169,7 @@ void imprimirAVL(NodoAVL *nodo)
     imprimirAVL(nodo->derecha);
     cout << nodo->palabra << " " << nodo->conteo << endl; // Imprimir palabra y conteo
     imprimirAVL(nodo->izquierda);
+    delete nodo;
   }
 }
 
