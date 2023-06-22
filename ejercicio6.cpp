@@ -52,5 +52,6 @@ int main()
     cin >> elementos[i];
   }
   sinPareja(elementos, 0, fin - 1);
+  delete[] elementos;
   return 0;
 }
