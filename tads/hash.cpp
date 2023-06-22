@@ -46,7 +46,7 @@ private:
         int primoRandom = primoSup(this->maxElementos);
         for (int i = 0; i < dato.length(); i++)
         {
-            hash = (int(dato[i]) + hash * primoRandom);
+            hash = hash * primoRandom + int(dato[i]);
         }
 
         return hash % this->maxElementos;
@@ -83,7 +83,7 @@ public:
         int pos = this->fHash(nombre);
         while (this->hash[pos]->clave!=nombre)
         {
-            pos = (pos + 1) % this->maxElementos;
+            pos = (pos^2) % this->maxElementos;
         }
         cout << nombre << " " << this->hash[pos]->valor<<endl;
     }

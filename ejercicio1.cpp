@@ -14,7 +14,7 @@ int main()
   // cout.rdbuf(myFile2.rdbuf());
   int cantAlumnos;
   cin >> cantAlumnos;
-  HashCerrado *hash = new HashCerrado(cantAlumnos); //, fHash);
+  HashCerrado *hash = new HashCerrado(cantAlumnos * 2); //, fHash);
   Lista<string> *lista = new Lista<string>();
   string nombre;
   float cantMaterias;

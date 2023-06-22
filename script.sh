@@ -1,9 +1,11 @@
 #!/bin/bash
 
-# ejercicios=("ejercicio7")
-# archivos=("10" "100" "1000" "10000")
-ejercicios=("ejercicio10")
-archivos=("facu10e1")
+# archivos=("tops1" "tops2" "tops3" "tops4" "tops5" "tops6" "tops7")
+# ejercicios=("ejercicio8")
+ejercicios=("ejercicio1")
+archivos=("10" "100" "1000" "10000" "100000" "1000000")
+# ejercicios=("ejercicio2")
+# archivos=("10" "100" "1000" "10000" "100000" "162793")
 
 # Crear archivo de resultados
 > resultados.txt
@@ -13,7 +15,7 @@ do
     echo "Ejecutando para el ejercicio: $ejercicio"
 
     # Compilar el código fuente
-    g++ -o "$ejercicio" "$ejercicio.cpp"
+    g++ -std=c++11 -o "$ejercicio" "$ejercicio.cpp"
 
     for archivo in "${archivos[@]}"
     do
