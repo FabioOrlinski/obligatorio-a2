@@ -1,4 +1,5 @@
-ejercicio7 prueba 10 resultado OK
-ejercicio7 prueba 100 resultado OK
-ejercicio7 prueba 1000 resultado OK
-ejercicio7 prueba 10000 resultado OK
+ejercicio4 prueba 10 resultado OK
+ejercicio4 prueba 100 resultado OK
+ejercicio4 prueba 1000 resultado OK
+ejercicio4 prueba 10000 resultado OK
+ejercicio4 prueba 100000 resultado OK
