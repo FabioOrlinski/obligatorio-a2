@@ -53,6 +53,19 @@ public:
         }
     }
 
+    ~Grafo()
+    {
+        for (int i = 0; i < tope; i++)
+        {
+            for (int j = 0; j < tope; j++)
+            {
+                delete this->matAdy[i][j];
+            }
+            delete[] this->matAdy[i];
+        }
+        delete[] this->matAdy;
+    }
+
     bool existeArista(int origen, int destino)
     {
         return this->matAdy[origen][destino]->existe;

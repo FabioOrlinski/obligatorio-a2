@@ -1,6 +1,7 @@
-ejercicio3 prueba 1 resultado OK
-ejercicio3 prueba 10 resultado OK
-ejercicio3 prueba 100 resultado OK
-ejercicio3 prueba 1000 resultado OK
-ejercicio3 prueba 10000 resultado OK
-ejercicio3 prueba 100000 resultado OK
+ejercicio5 prueba tops1 resultado OK
+ejercicio5 prueba tops2 resultado OK
+ejercicio5 prueba tops3 resultado OK
+ejercicio5 prueba tops4 resultado OK
+ejercicio5 prueba tops5 resultado OK
+ejercicio5 prueba tops6 resultado OK
+ejercicio5 prueba tops7 resultado OK
