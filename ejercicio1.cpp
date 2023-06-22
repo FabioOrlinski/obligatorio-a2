@@ -8,13 +8,13 @@ using namespace std;
 
 int main()
 {
-  // ifstream myFile("Pruebas/Ejercicio1/10.in.txt");
-  // cin.rdbuf(myFile.rdbuf());
-  // ofstream myFile2("Pruebas/Ejercicio1/10.prueba.txt");
-  // cout.rdbuf(myFile2.rdbuf());
+ //ifstream myFile("Pruebas/Ejercicio1/10.in.txt");
+ //cin.rdbuf(myFile.rdbuf());
+ //ofstream myFile2("Pruebas/Ejercicio1/10.prueba.txt");
+ //cout.rdbuf(myFile2.rdbuf());
   int cantAlumnos;
   cin >> cantAlumnos;
-  HashCerrado *hash = new HashCerrado(cantAlumnos * 2); //, fHash);
+  HashCerrado *hash = new HashCerrado(cantAlumnos); //, fHash);
   Lista<string> *lista = new Lista<string>();
   string nombre;
   float cantMaterias;

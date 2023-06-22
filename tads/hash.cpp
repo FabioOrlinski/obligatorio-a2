@@ -43,10 +43,10 @@ private:
     {
 
         unsigned long long hash = 0;
-        int primoRandom = primoSup(this->maxElementos);
+        int primoRandom = 37;
         for (int i = 0; i < dato.length(); i++)
         {
-            hash = hash * primoRandom + int(dato[i]);
+            hash = hash + primoRandom * int(dato[i]);
         }
 
         return hash % this->maxElementos;
@@ -55,7 +55,7 @@ private:
 public:
     HashCerrado(int maxElementos) //, int (*fHash)(T))
     {
-        this->maxElementos = primoSup(maxElementos);
+        this->maxElementos = primoSup(maxElementos * 2);
         this->largo = 0;
         this->hash = new Asociacion *[this->maxElementos];
         for (int i = 0; i < this->maxElementos; i++)
@@ -81,19 +81,23 @@ public:
     void imprimir(string nombre)
     {
         int pos = this->fHash(nombre);
-        while (this->hash[pos]->clave!=nombre)
+        int i = 1;
+        while (!this->hash[pos] || this->hash[pos]->clave != nombre)
         {
-            pos = (pos^2) % this->maxElementos;
+            pos = (pos +i*i) % this->maxElementos;
+            i++;
         }
-        cout << nombre << " " << this->hash[pos]->valor<<endl;
+        cout << nombre << " " << this->hash[pos]->valor << endl;
     }
 
     void agregar(Asociacion *dato)
     {
         int pos = this->fHash(dato->clave);
+        int i = 1;
         while (this->hash[pos])
         {
-            pos = (pos + 1) % this->maxElementos;
+            pos = (pos + i*i) % this->maxElementos;
+            i++;
         }
         this->hash[pos] = dato;
     }
