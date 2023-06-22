@@ -17,12 +17,15 @@ int max(int a, int b) {
 
 void mochilaDP(Elemento **elementos, int cantArchivos, int maximoTamano, int maximoLineasCodigo) {
     int ***matDP = new int **[cantArchivos + 1];
-    for (int i = 0; i <= cantArchivos; i++) {
-        matDP[i] = new int *[maximoTamano + 1];
-        for (int j = 0; j <= maximoTamano; j++) {
+    for (int i = 0; i <= cantArchivos; ++i) {
+        matDP[i] = new int*[maximoTamano + 1];
+        for (int j = 0; j <= maximoTamano; ++j) {
             matDP[i][j] = new int[maximoLineasCodigo + 1];
-            for (int k = 0; k <= maximoLineasCodigo; k++) {
-                matDP[i][j][k] = 0;
+            matDP[i][j][0] = 0;
+            if(i == 0) {
+                for (int k = 1; k <= maximoLineasCodigo; ++k) {
+                    matDP[0][j][k] = 0;
+                }
             }
         }
     }
